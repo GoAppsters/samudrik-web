@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Samudrik — A personal tool for recording and studying hand markings. Built for practitioners of Samudrik Shastra." />
+  <title>Samudrik – Hand Study App</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary:   #5C6BC0;
+      --primary-d: #3949AB;
+      --text:      #1a1a2e;
+      --muted:     #64748b;
+      --bg:        #f8f9fc;
+      --white:     #ffffff;
+      --border:    #e2e8f0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+
+    /* nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+    }
+    .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
+    .nav-links  { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color .15s; }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-cta { background: var(--primary); color: #fff !important; padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 0.85rem !important; }
+    .nav-cta:hover { background: var(--primary-d) !important; }
+    @media(max-width:640px){ nav{padding:0 16px;} .hide-mobile{display:none;} }
+
+    /* hero */
+    .hero {
+      background: linear-gradient(140deg, #3949AB 0%, #6A1B9A 100%);
+      color: #fff; padding: 80px 24px 88px; text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 0.82rem; letter-spacing: 1.5px; text-transform: uppercase;
+      opacity: 0.7; margin-bottom: 16px; font-weight: 500;
+    }
+    .hero h1 {
+      font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800;
+      line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 18px;
+    }
+    .hero p {
+      font-size: 1.05rem; opacity: 0.82; max-width: 500px;
+      margin: 0 auto 40px; line-height: 1.7;
+    }
+
+    /* store badges — official images */
+    .badges { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: center; }
+    .badge-link { display: inline-block; transition: opacity .15s; }
+    .badge-link:hover { opacity: 0.85; }
+    .badge-link img { display: block; }
+
+    /* sections */
+    section { padding: 72px 24px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 1.8px;
+      text-transform: uppercase; color: var(--primary); margin-bottom: 10px;
+    }
+    .section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.3px; margin-bottom: 12px; }
+    .section-sub { font-size: 0.97rem; color: var(--muted); max-width: 540px; margin-bottom: 48px; line-height: 1.7; }
+
+    /* features */
+    #features { background: var(--white); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .fcard {
+      border: 1px solid var(--border); border-radius: 12px; padding: 26px;
+      transition: box-shadow .15s, transform .15s;
+    }
+    .fcard:hover { box-shadow: 0 4px 18px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .fcard-icon { font-size: 1.6rem; margin-bottom: 12px; }
+    .fcard h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 6px; }
+    .fcard p  { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+
+    /* privacy */
+    #privacy { background: var(--bg); }
+    .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:580px){ .pgrid{grid-template-columns:1fr;} }
+    .pitem {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px;
+    }
+    .pitem-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .pitem h4 { font-size: 0.87rem; font-weight: 700; margin-bottom: 3px; }
+    .pitem p  { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+    /* download */
+    #download { background: linear-gradient(140deg, #3949AB 0%, #6A1B9A 100%); color:#fff; text-align:center; }
+    #download .section-title { color:#fff; }
+    #download .section-sub   { color:rgba(255,255,255,.78); margin:0 auto 40px; }
+
+    /* footer */
+    footer {
+      background: #111827; color: rgba(255,255,255,.5);
+      padding: 32px; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 14px; font-size: 0.82rem;
+    }
+    footer a { color: rgba(255,255,255,.5); text-decoration:none; }
+    footer a:hover { color:#fff; }
+    .footer-links { display:flex; gap:20px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#top">🖐 Samudrik</a>
+  <div class="nav-links">
+    <a class="hide-mobile" href="#features">Features</a>
+    <a class="hide-mobile" href="#privacy">Privacy</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms</a>
+    <a class="nav-cta" href="#download">Download</a>
+  </div>
+</nav>
+
+<!-- hero -->
+<section class="hero" id="top">
+  <p class="hero-eyebrow">Samudrik Shastra · For practitioners</p>
+  <h1>Every hand tells a story.<br>Now you can keep track.</h1>
+  <p>A personal tool for anyone who studies hands — capture palm images in seconds, record observations, and look back when patterns emerge months later.</p>
+  <div class="badges">
+    <!-- Replace the href values with your actual store URLs once published -->
+    <a class="badge-link" href="#download" id="play-badge">
+      <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+           alt="Get it on Google Play" height="58" />
+    </a>
+    <a class="badge-link" href="#download" id="appstore-badge">
+      <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+           alt="Download on the App Store" height="40" />
+    </a>
+  </div>
+</section>
+
+<!-- features -->
+<section id="features">
+  <div class="container">
+    <p class="section-eyebrow">What it does</p>
+    <h2 class="section-title">Built around how you actually work</h2>
+    <p class="section-sub">You meet someone, you want their palm photo. You don't have time for a form. Samudrik starts there.</p>
+    <div class="features-grid">
+
+      <div class="fcard">
+        <div class="fcard-icon">📸</div>
+        <h3>Quick Capture</h3>
+        <p>One tap creates the record. The camera opens. You shoot the palm. Names, notes, context — fill those in later when you have a moment.</p>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-icon">🔍</div>
+        <h3>AI Feature Reading</h3>
+        <p>Tap the analysis button on any image and the app names what it sees — heart line, fate line, mounts, finger shapes — in Samudrik terminology. Useful as a second opinion or starting point.</p>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-icon">👤</div>
+        <h3>Person Records</h3>
+        <p>Each person gets their own profile — face photo, phone, context note (where you met them), and all their hand images in one place. Search by name or number.</p>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-icon">📅</div>
+        <h3>Life Events</h3>
+        <p>Attach events to a record — a job change, a marriage, a health episode. When you re-examine the hand later, the correlation is right there.</p>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-icon">🌐</div>
+        <h3>Community Dataset</h3>
+        <p>If you choose to, you can contribute anonymised palm images to a shared research pool. Browse patterns from across India and the world. Opt-in only.</p>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-icon">🎙</div>
+        <h3>Voice Notes</h3>
+        <p>Holding someone's hand and want to note something? Speak it. The mic button on name, context, and notes fields converts your voice to text hands-free.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- privacy -->
+<section id="privacy">
+  <div class="container">
+    <p class="section-eyebrow">Privacy</p>
+    <h2 class="section-title">People's hands. Their data.</h2>
+    <p class="section-sub">The people in your records haven't consented to being in a database. We take that seriously — here's exactly what stays private.</p>
+    <div class="pgrid">
+      <div class="pitem">
+        <div class="pitem-icon">🔒</div>
+        <div>
+          <h4>Names and contacts — private, always</h4>
+          <p>Names, phone numbers, dates of birth, face photos, and your personal notes never leave your account. Not even to us.</p>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pitem-icon">✋</div>
+        <div>
+          <h4>Palm sharing is opt-in per person</h4>
+          <p>Palm images only go to the community dataset when you explicitly switch it on for that person. Off by default. Reversible anytime.</p>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pitem-icon">🗑</div>
+        <div>
+          <h4>Delete everything in one tap</h4>
+          <p>Settings → Delete Account wipes every record, image, and note permanently. No waiting period, no support ticket needed.</p>
+        </div>
+      </div>
+      <div class="pitem">
+        <div class="pitem-icon">🚫</div>
+        <div>
+          <h4>No ads, no data selling</h4>
+          <p>The app is free to download with 5 AI analyses included. We don't run ads or sell your data to fund it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- download cta -->
+<section id="download">
+  <div class="container">
+    <h2 class="section-title">Free to download</h2>
+    <p class="section-sub">5 AI analyses included on a new account. No subscription required to start.</p>
+    <div class="badges">
+      <a class="badge-link" href="#" id="play-badge-2">
+        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+             alt="Get it on Google Play" height="58" />
+      </a>
+      <a class="badge-link" href="#" id="appstore-badge-2">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+             alt="Download on the App Store" height="40" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <strong style="color:rgba(255,255,255,.8)">🖐 Samudrik</strong><br>
+    &copy; 2025 &nbsp;·&nbsp; <a href="mailto:samudrikapp@gmail.com">samudrikapp@gmail.com</a>
+  </div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </div>
+</footer>
+
+</body>
+</html>
