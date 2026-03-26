@@ -5,118 +5,244 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Samudrik — A personal tool for recording and studying hand markings. Built for practitioners of Samudrik Shastra." />
   <title>Samudrik – Hand Study App</title>
+  <link rel="icon" href="app-icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --primary:   #5C6BC0;
-      --primary-d: #3949AB;
-      --text:      #1a1a2e;
-      --muted:     #64748b;
-      --bg:        #f8f9fc;
-      --white:     #ffffff;
-      --border:    #e2e8f0;
+      --ink:      #1c0c08;   /* deep warm mahogany-dark  */
+      --ink2:     #2e1812;   /* slightly lighter warm dark */
+      --gold:     #b8782a;   /* amber from the hand       */
+      --gold-l:   #e0b86a;   /* lighter amber highlight   */
+      --maroon:   #5a2e1a;   /* deep warm maroon          */
+      --white:    #ffffff;
+      --off:      #fdf8f2;   /* warm parchment            */
+      --muted:    #7a6858;   /* warm brownish muted       */
+      --border:   #ede0ce;   /* warm parchment border     */
     }
+
     html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg); color: var(--text); line-height: 1.6;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      line-height: 1.5;
+      font-size: 17px;
     }
 
-    /* nav */
+    /* ── NAV ─────────────────────────────────────────── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.94); backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(28,12,8,0.94);
+      backdrop-filter: blur(16px);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 32px; height: 60px;
+      padding: 0 40px; height: 64px;
     }
-    .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
-    .nav-links  { display: flex; gap: 24px; align-items: center; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color .15s; }
-    .nav-links a:hover { color: var(--primary); }
-    .nav-cta { background: var(--primary); color: #fff !important; padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 0.85rem !important; }
-    .nav-cta:hover { background: var(--primary-d) !important; }
-    @media(max-width:640px){ nav{padding:0 16px;} .hide-mobile{display:none;} }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 1.1rem; color: #fff;
+      text-decoration: none; letter-spacing: -0.3px;
+    }
+    .nav-brand img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.55); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; transition: color .15s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--gold); color: #fff !important;
+      padding: 9px 20px; border-radius: 10px;
+      font-weight: 700; font-size: 0.88rem !important;
+      transition: background .15s !important;
+    }
+    .nav-cta:hover { background: var(--maroon) !important; }
+    @media(max-width:640px) { nav { padding: 0 20px; } .hide-mobile { display: none; } }
 
-    /* hero */
+    /* ── HERO ────────────────────────────────────────── */
     .hero {
-      background: linear-gradient(140deg, #3949AB 0%, #6A1B9A 100%);
-      color: #fff; padding: 80px 24px 88px; text-align: center;
+      background: linear-gradient(160deg, #2e1410 0%, #1c0c08 50%, #3a1a08 100%);
+      color: #fff;
+      padding: 100px 24px 110px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-eyebrow {
-      font-size: 0.82rem; letter-spacing: 1.5px; text-transform: uppercase;
-      opacity: 0.7; margin-bottom: 16px; font-weight: 500;
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(196,146,53,0.22) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-icon {
+      width: 96px; height: 96px;
+      border-radius: 24px; object-fit: cover;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      margin: 0 auto 28px;
+      display: block;
+    }
+    .hero-tag {
+      display: inline-block;
+      border: 1px solid rgba(224,184,106,0.45);
+      color: var(--gold-l);
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 100px;
+      margin-bottom: 28px;
     }
     .hero h1 {
-      font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800;
-      line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 18px;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      max-width: 800px;
+      margin-left: auto; margin-right: auto;
     }
-    .hero p {
-      font-size: 1.05rem; opacity: 0.82; max-width: 500px;
-      margin: 0 auto 40px; line-height: 1.7;
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #e8c06a, #c4821e);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-
-    /* store badges — official images */
+    .hero-sub {
+      font-size: 1.15rem; color: rgba(255,255,255,0.6);
+      max-width: 480px; margin: 0 auto 48px;
+      line-height: 1.75; font-weight: 400;
+    }
     .badges { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: center; }
     .badge-link { display: inline-block; transition: opacity .15s; }
-    .badge-link:hover { opacity: 0.85; }
-    .badge-link img { display: block; }
+    .badge-link:hover { opacity: 0.8; }
+    .badge-link img { display: block; height: 80px; width: auto; }
+    .badge-link.applestore { display: none; }
 
-    /* sections */
-    section { padding: 72px 24px; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    .section-eyebrow {
-      font-size: 0.75rem; font-weight: 700; letter-spacing: 1.8px;
-      text-transform: uppercase; color: var(--primary); margin-bottom: 10px;
+    /* ── SECTION BASE ────────────────────────────────── */
+    section { padding: 96px 24px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 0.72rem; font-weight: 800;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
     }
-    .section-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.3px; margin-bottom: 12px; }
-    .section-sub { font-size: 0.97rem; color: var(--muted); max-width: 540px; margin-bottom: 48px; line-height: 1.7; }
+    .section-h {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 900; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 16px;
+      color: var(--ink);
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 520px; line-height: 1.75;
+      font-weight: 400;
+    }
 
-    /* features */
+    /* ── FEATURES ────────────────────────────────────── */
     #features { background: var(--white); }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .features-header { margin-bottom: 56px; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      border: 2px solid var(--maroon);
+      border-radius: 20px;
+      overflow: hidden;
+    }
     .fcard {
-      border: 1px solid var(--border); border-radius: 12px; padding: 26px;
-      transition: box-shadow .15s, transform .15s;
+      padding: 48px 40px;
+      background: var(--white);
+      border-right: 2px solid var(--maroon);
+      border-bottom: 2px solid var(--maroon);
+      transition: background .2s;
+      cursor: default;
     }
-    .fcard:hover { box-shadow: 0 4px 18px rgba(0,0,0,.07); transform: translateY(-2px); }
-    .fcard-icon { font-size: 1.6rem; margin-bottom: 12px; }
-    .fcard h3 { font-size: 0.97rem; font-weight: 700; margin-bottom: 6px; }
-    .fcard p  { font-size: 0.86rem; color: var(--muted); line-height: 1.65; }
+    .fcard:nth-child(2n) { border-right: none; }
+    @media(min-width:900px) { .fcard:nth-child(2n) { border-right: 2px solid var(--maroon); } .fcard:nth-child(3n) { border-right: none; } }
+    .fcard:nth-last-child(-n+2) { border-bottom: none; }
+    @media(min-width:900px) { .fcard:nth-last-child(-n+3) { border-bottom: none; } }
+    .fcard:hover { background: var(--off); }
+    .fcard-num {
+      font-size: 0.8rem; font-weight: 800;
+      letter-spacing: 2px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 18px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .fcard-num::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .fcard-icon { font-size: 2.6rem; margin-bottom: 18px; line-height: 1; }
+    .fcard h3 {
+      font-size: 1.35rem; font-weight: 800;
+      margin-bottom: 12px; letter-spacing: -0.4px;
+    }
+    .fcard p { font-size: 1.02rem; color: var(--muted); line-height: 1.75; }
 
-    /* privacy */
-    #privacy { background: var(--bg); }
-    .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media(max-width:580px){ .pgrid{grid-template-columns:1fr;} }
+    /* ── PRIVACY ─────────────────────────────────────── */
+    #privacy { background: linear-gradient(160deg, #2e1410 0%, #1c0c08 100%); color: #fff; }
+    #privacy .eyebrow { color: var(--gold-l); }
+    #privacy .section-h { color: #fff; }
+    #privacy .section-sub { color: rgba(255,255,255,0.5); margin-bottom: 56px; }
+    .pgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media(max-width:580px) { .pgrid { grid-template-columns: 1fr; } }
     .pitem {
-      display: flex; gap: 14px; align-items: flex-start;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 12px; padding: 18px;
+      background: rgba(46,24,18,0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: border-color .2s;
     }
-    .pitem-icon { font-size: 1.3rem; flex-shrink: 0; }
-    .pitem h4 { font-size: 0.87rem; font-weight: 700; margin-bottom: 3px; }
-    .pitem p  { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+    .pitem:hover { border-color: rgba(224,184,106,0.45); }
+    .pitem-icon { font-size: 1.8rem; margin-bottom: 14px; line-height: 1; }
+    .pitem h4 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: #fff; }
+    .pitem p  { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
 
-    /* download */
-    #download { background: linear-gradient(140deg, #3949AB 0%, #6A1B9A 100%); color:#fff; text-align:center; }
-    #download .section-title { color:#fff; }
-    #download .section-sub   { color:rgba(255,255,255,.78); margin:0 auto 40px; }
+    /* ── DOWNLOAD CTA ────────────────────────────────── */
+    #download {
+      background: var(--off);
+      text-align: center;
+      border-top: 2px solid var(--border);
+    }
+    #download .section-h { font-size: clamp(2.4rem, 6vw, 4.5rem); }
+    #download .section-sub { margin: 0 auto 48px; }
+    .dl-badge-wrap { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: center; }
 
-    /* footer */
+    /* ── FOOTER ──────────────────────────────────────── */
     footer {
-      background: #111827; color: rgba(255,255,255,.5);
-      padding: 32px; display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 14px; font-size: 0.82rem;
+      background: #140a06;
+      color: rgba(255,255,255,0.4);
+      padding: 36px 40px;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 16px;
+      font-size: 0.85rem;
     }
-    footer a { color: rgba(255,255,255,.5); text-decoration:none; }
-    footer a:hover { color:#fff; }
-    .footer-links { display:flex; gap:20px; flex-wrap:wrap; }
+    .footer-brand {
+      display: flex; align-items: center; gap: 9px;
+      font-weight: 800; color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+    }
+    .footer-brand img { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; }
+    .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: flex-end; }
+    footer a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color .15s; }
+    footer a:hover { color: #fff; }
+    @media(max-width:640px) {
+      footer { padding: 28px 20px; }
+      .footer-right { align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <a class="nav-brand" href="#top">🖐 Samudrik</a>
+  <a class="nav-brand" href="#top">
+    <img src="app-icon.png" alt="Samudrik" />
+    Samudrik
+  </a>
   <div class="nav-links">
     <a class="hide-mobile" href="#features">Features</a>
     <a class="hide-mobile" href="#privacy">Privacy</a>
@@ -126,138 +252,145 @@
   </div>
 </nav>
 
-<!-- hero -->
+<!-- HERO -->
 <section class="hero" id="top">
-  <p class="hero-eyebrow">Samudrik Shastra · For practitioners</p>
-  <h1>Every hand tells a story.<br>Now you can keep track.</h1>
-  <p>A personal tool for anyone who studies hands — capture palm images in seconds, record observations, and look back when patterns emerge months later.</p>
+  <img class="hero-icon" src="app-icon.png" alt="Samudrik app icon" />
+  <div class="hero-tag">Samudrik Shastra · For practitioners</div>
+  <h1>Every hand<br>tells a <em>story.</em></h1>
+  <p class="hero-sub">A personal tool for anyone who studies hands — capture palm images in seconds, record observations, and look back when patterns emerge months later.</p>
   <div class="badges">
-    <!-- Replace the href values with your actual store URLs once published -->
     <a class="badge-link" href="#download" id="play-badge">
       <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-           alt="Get it on Google Play" height="58" />
+           alt="Get it on Google Play" height="80" />
     </a>
-    <a class="badge-link" href="#download" id="appstore-badge">
+    <a class="badge-link applestore" href="#download" id="appstore-badge">
       <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-           alt="Download on the App Store" height="40" />
+           alt="Download on the App Store" height="42" />
     </a>
   </div>
 </section>
 
-<!-- features -->
+<!-- FEATURES -->
 <section id="features">
   <div class="container">
-    <p class="section-eyebrow">What it does</p>
-    <h2 class="section-title">Built around how you actually work</h2>
-    <p class="section-sub">You meet someone, you want their palm photo. You don't have time for a form. Samudrik starts there.</p>
+    <div class="features-header">
+      <p class="eyebrow">What it does</p>
+      <h2 class="section-h">Built around how<br>you actually work</h2>
+      <p class="section-sub">You meet someone, you want their palm photo. You don't have time for a form. Samudrik starts there.</p>
+    </div>
     <div class="features-grid">
 
       <div class="fcard">
+        <div class="fcard-num">01</div>
         <div class="fcard-icon">📸</div>
         <h3>Quick Capture</h3>
         <p>One tap creates the record. The camera opens. You shoot the palm. Names, notes, context — fill those in later when you have a moment.</p>
       </div>
 
       <div class="fcard">
+        <div class="fcard-num">02</div>
         <div class="fcard-icon">🔍</div>
         <h3>AI Feature Reading</h3>
-        <p>Tap the analysis button on any image and the app names what it sees — heart line, fate line, mounts, finger shapes — in Samudrik terminology. Useful as a second opinion or starting point.</p>
+        <p>Tap the analysis button on any image and the app names what it sees — heart line, fate line, mounts, finger shapes — in Samudrik terminology.</p>
       </div>
 
       <div class="fcard">
+        <div class="fcard-num">03</div>
         <div class="fcard-icon">👤</div>
         <h3>Person Records</h3>
-        <p>Each person gets their own profile — face photo, phone, context note (where you met them), and all their hand images in one place. Search by name or number.</p>
+        <p>Each person gets their own profile — face photo, phone, context note, and all their hand images in one place. Search by name or number.</p>
       </div>
 
       <div class="fcard">
+        <div class="fcard-num">04</div>
         <div class="fcard-icon">📅</div>
         <h3>Life Events</h3>
         <p>Attach events to a record — a job change, a marriage, a health episode. When you re-examine the hand later, the correlation is right there.</p>
       </div>
 
       <div class="fcard">
+        <div class="fcard-num">05</div>
         <div class="fcard-icon">🌐</div>
         <h3>Community Dataset</h3>
-        <p>If you choose to, you can contribute anonymised palm images to a shared research pool. Browse patterns from across India and the world. Opt-in only.</p>
+        <p>Contribute anonymised palm images to a shared research pool. Browse patterns from across India and the world. Opt-in only.</p>
       </div>
 
       <div class="fcard">
+        <div class="fcard-num">06</div>
         <div class="fcard-icon">🎙</div>
         <h3>Voice Notes</h3>
-        <p>Holding someone's hand and want to note something? Speak it. The mic button on name, context, and notes fields converts your voice to text hands-free.</p>
+        <p>Holding someone's hand and want to note something? Speak it. The mic button converts your voice to text — completely hands-free.</p>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- privacy -->
+<!-- PRIVACY -->
 <section id="privacy">
   <div class="container">
-    <p class="section-eyebrow">Privacy</p>
-    <h2 class="section-title">People's hands. Their data.</h2>
+    <p class="eyebrow">Privacy</p>
+    <h2 class="section-h">People's hands.<br>Their data.</h2>
     <p class="section-sub">The people in your records haven't consented to being in a database. We take that seriously — here's exactly what stays private.</p>
     <div class="pgrid">
       <div class="pitem">
         <div class="pitem-icon">🔒</div>
-        <div>
-          <h4>Names and contacts — private, always</h4>
-          <p>Names, phone numbers, dates of birth, face photos, and your personal notes never leave your account. Not even to us.</p>
-        </div>
+        <h4>Names and contacts — private, always</h4>
+        <p>Names, phone numbers, dates of birth, face photos, and your personal notes never leave your account. Not even to us.</p>
       </div>
       <div class="pitem">
         <div class="pitem-icon">✋</div>
-        <div>
-          <h4>Palm sharing is opt-in per person</h4>
-          <p>Palm images only go to the community dataset when you explicitly switch it on for that person. Off by default. Reversible anytime.</p>
-        </div>
+        <h4>Palm sharing is opt-in per person</h4>
+        <p>Palm images only go to the community dataset when you explicitly switch it on for that person. Off by default. Reversible anytime.</p>
       </div>
       <div class="pitem">
         <div class="pitem-icon">🗑</div>
-        <div>
-          <h4>Delete everything in one tap</h4>
-          <p>Settings → Delete Account wipes every record, image, and note permanently. No waiting period, no support ticket needed.</p>
-        </div>
+        <h4>Delete everything in one tap</h4>
+        <p>Settings → Delete Account wipes every record, image, and note permanently. No waiting period, no support ticket needed.</p>
       </div>
       <div class="pitem">
         <div class="pitem-icon">🚫</div>
-        <div>
-          <h4>No ads, no data selling</h4>
-          <p>The app is free to download with 5 AI analyses included. We don't run ads or sell your data to fund it.</p>
-        </div>
+        <h4>No ads, no data selling</h4>
+        <p>The app is free to download with 5 AI analyses included. We don't run ads or sell your data to fund it.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- download cta -->
+<!-- DOWNLOAD CTA -->
 <section id="download">
   <div class="container">
-    <h2 class="section-title">Free to download</h2>
+    <p class="eyebrow">Get the app</p>
+    <h2 class="section-h">Free to download</h2>
     <p class="section-sub">5 AI analyses included on a new account. No subscription required to start.</p>
-    <div class="badges">
+    <div class="dl-badge-wrap">
       <a class="badge-link" href="#" id="play-badge-2">
         <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-             alt="Get it on Google Play" height="58" />
+             alt="Get it on Google Play" height="80" />
       </a>
-      <a class="badge-link" href="#" id="appstore-badge-2">
+      <a class="badge-link applestore" href="#" id="appstore-badge-2">
         <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-             alt="Download on the App Store" height="40" />
+             alt="Download on the App Store" height="42" />
       </a>
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div>
-    <strong style="color:rgba(255,255,255,.8)">🖐 Samudrik</strong><br>
-    &copy; 2025 &nbsp;·&nbsp; <a href="mailto:samudrikapp@gmail.com">samudrikapp@gmail.com</a>
+    <div class="footer-brand">
+      <img src="app-icon.png" alt="Samudrik" />
+      Samudrik
+    </div>
+    <div style="margin-top:6px;">&copy; 2025 &nbsp;·&nbsp; <a href="mailto:samudrikapp@gmail.com">samudrikapp@gmail.com</a></div>
   </div>
-  <div class="footer-links">
-    <a href="#features">Features</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Service</a>
+  <div class="footer-right">
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
   </div>
 </footer>
 
