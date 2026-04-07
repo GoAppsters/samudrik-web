@@ -6,6 +6,8 @@
   <meta name="description" content="Samudrik — A personal tool for recording and studying hand markings. Built for practitioners of Samudrik Shastra." />
   <title>Samudrik – Hand Study App</title>
   <link rel="icon" href="app-icon.png" type="image/png" />
+  <!-- Smart App Banner: iOS native (uncomment when App Store ID is available) -->
+  <!-- <meta name="apple-itunes-app" content="app-id=YOUR_APP_STORE_ID" /> -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
@@ -233,6 +235,45 @@
       footer { padding: 28px 20px; }
       .footer-right { align-items: flex-start; }
     }
+    /* ── Smart App Banner (mobile only) ──────────────────────── */
+    .app-banner {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 9999;
+      background: var(--ink);
+      padding: 10px 16px;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      font-size: 14px;
+    }
+    .app-banner.visible { display: flex; }
+    .app-banner-icon { width: 40px; height: 40px; border-radius: 10px; }
+    .app-banner-text { flex: 1; }
+    .app-banner-title { color: #fff; font-weight: 700; font-size: 14px; }
+    .app-banner-sub { color: var(--muted); font-size: 12px; }
+    .app-banner-open {
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .app-banner-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -394,5 +435,54 @@
   </div>
 </footer>
 
+<!-- Smart App Banner — shown on mobile browsers only -->
+<div class="app-banner" id="app-banner">
+  <button class="app-banner-close" id="banner-close">&times;</button>
+  <img class="app-banner-icon" src="app-icon.png" alt="Samudrik" />
+  <div class="app-banner-text">
+    <div class="app-banner-title">Samudrik</div>
+    <div class="app-banner-sub">Open in the app</div>
+  </div>
+  <a class="app-banner-open" id="banner-open" href="#">OPEN</a>
+</div>
+
+<script>
+(function() {
+  // Only show on mobile devices
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!isMobile) return;
+
+  // Don't show if user dismissed it this session
+  if (sessionStorage.getItem('samudrik_banner_dismissed')) return;
+
+  var banner = document.getElementById('app-banner');
+  var isAndroid = /Android/i.test(navigator.userAgent);
+  var openBtn = document.getElementById('banner-open');
+
+  // Set the correct store link
+  if (isAndroid) {
+    // Try intent URL to open app directly, fall back to Play Store
+    openBtn.href = 'intent://samudrik.app#Intent;package=com.samudrik.app;scheme=https;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.samudrik.app;end';
+  } else {
+    // iOS: link to App Store when available, otherwise keep website
+    openBtn.href = 'https://play.google.com/store/apps/details?id=com.samudrik.app';
+    // TODO: Replace with App Store link when iOS app is published:
+    // openBtn.href = 'https://apps.apple.com/app/idYOUR_APP_ID';
+  }
+
+  // Show the banner
+  banner.classList.add('visible');
+
+  // Offset the nav to avoid overlap
+  document.body.style.paddingTop = '60px';
+
+  // Close button
+  document.getElementById('banner-close').addEventListener('click', function() {
+    banner.classList.remove('visible');
+    document.body.style.paddingTop = '0';
+    sessionStorage.setItem('samudrik_banner_dismissed', '1');
+  });
+})();
+</script>
 </body>
 </html>
