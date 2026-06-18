@@ -59,7 +59,7 @@
   .nav{position:sticky;top:0;z-index:50;background:color-mix(in oklab,var(--paper) 88%,transparent);backdrop-filter:blur(12px);border-bottom:.5px solid var(--hairline-2)}
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.01em}
-  .brand-mark{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-family:var(--serif);font-style:italic;font-size:15px;font-weight:500}
+  .brand-mark{width:30px;height:30px;border-radius:7px;object-fit:cover;display:block;flex-shrink:0;border:.5px solid var(--hairline)}
   .nav-links{display:flex;gap:28px;font-size:14px;color:var(--ink-2)}
   .nav-links a:hover{color:var(--ink)}
   .nav-cta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border:.5px solid var(--ink);border-radius:999px;cursor:pointer;background:transparent;text-decoration:none;display:inline-block}
@@ -271,7 +271,7 @@
 <nav class="nav">
   <div class="wrap nav-inner">
     <a href="#top" class="brand">
-      <span class="brand-mark">S</span>
+      <img class="brand-mark" src="app-icon.png" alt="Samudrik" />
       <span>Samudrik</span>
     </a>
     <div class="nav-links">
@@ -558,7 +558,7 @@
   <div class="wrap">
     <div class="foot">
       <div>
-        <div class="brand" style="margin-bottom:14px"><span class="brand-mark">S</span><span>Samudrik</span></div>
+        <div class="brand" style="margin-bottom:14px"><img class="brand-mark" src="app-icon.png" alt="Samudrik" /><span>Samudrik</span></div>
         <p style="max-width:30ch;line-height:1.55;margin:0">A practitioner's tool for the study of hands. Made with care for the lineage.</p>
       </div>
       <div>
